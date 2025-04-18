@@ -51,12 +51,11 @@ python -m venv pyfluent-env
 ```
 ### Step 2: Activate the Environment
 
-.\pyfluent-env\Scripts\activate
-
 Open a terminal (Command Prompt or PowerShell) and run:
 
 ```bash
 python -m venv pyfluent-env
+.\pyfluent-env\Scripts\activate
 ```
 You should see the environment name ((pyfluent-env)) appear at the beginning of your terminal prompt.
 
