@@ -72,14 +72,13 @@ pip install ansys-fluent-core
 #### 2. Directory Structure
 
 fluent-automation-tool/
-│
-├── geometry/
-│   └── Static Mixer geometry.dsco
-├── velocity.png
-├── temperature.png
-├── ...
-├── main.py
-└── README.md
+geometry/
+Static Mixer geometry.dsco
+velocity.png
+temperature.png
+...
+main.py
+README.md
 
 
 #### 3. Run the Script
