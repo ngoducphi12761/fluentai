@@ -1,6 +1,8 @@
 import subprocess
 import pyttsx3
 from faster_whisper import WhisperModel
+import fluent_automation as fluent
+import speech_recognition as sr
 
 # --1. TTS setup--
 def speak(text):
@@ -18,8 +20,30 @@ def transcribe_audio(audio_path):
     segments, _ = model.transcribe(audio_path)
     text = " ".join([seg.text for seg in segments])
     return text
-
-#--3. LLM Query via OLLama
+# Transcribe from microphone in real-time
+def transcribe_audio(audio_path):
+    recognizer = sr.Recognizer()
+    try:
+        # Use the microphone as the audio source
+        with sr.AudioFile(audio_path) as source:
+            print("Listening... Speak your prompt.")
+            audio = recognizer.listen(source)
+            # Save the audio to a file
+            with open("temp_input.wav", "wb") as f:
+                f.write(audio.get_wav_data())
+                with sr.Microphone() as source:
+                    print("Listening... Speak your prompt.")
+                    audio = recognizer.listen(source)
+                    #Save the audio to a file
+                    with open("temp_input.wav", "wb") as f:
+                        f.write(audio.get_wav_data())
+                
+                    # Transcribe with Whisper
+                    segments, _ = model.transcribe("temp_input.wav")
+                    text = " ".join([seg.text for seg in segments])
+                    return text
+    except sr.UnknownValueError:
+        print("Sorry, I could not understand the audio.")
 def query_llm(transcribe_text):
     # Call the OLLAMA model using subprocess
     system_prompt = f"""
@@ -46,17 +70,23 @@ def query_llm(transcribe_text):
     return output.strip()
 
 def main():
-    speak("Please give me a prompt.")
-    audio_path = r"demo_audio/Recording.wav"
-    transribed = transcribe_audio(r"demo_audio/Recording.wav")
-    print("[your prompt]", transribed)
-    speak(f"You said:  {transribed}")
+    while True:
+        audio_path = r"demo_audio/Recording.wav"
+        transribed = transcribe_audio(r"demo_audio/Recording.wav")
+        print("[your prompt]", transribed)
+        speak(f"You said:  {transribed}")
 
-    llm_response = query_llm(transribed)
-    print("[LLM Response]", llm_response)
-    speak(f"LLM response: {llm_response}")
-    
-    speak(llm_response)
+        # Exit keywords
+        if any(word in transcribed.lower() for word in ["stop", "exit", "quit", "shutdown"]):
+            speak("Stopping simulation. Goodbye!")
+            print("🛑 Exiting FluentAi.")
+            break
+
+        llm_response = query_llm(transribed)
+        print("[LLM Response]", llm_response)
+        speak(f"LLM response: {llm_response}")
+        
+        speak(llm_response)
 
 if __name__ == "__main__":
     main()

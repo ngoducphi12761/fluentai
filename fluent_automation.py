@@ -122,7 +122,7 @@ class FluentPostProcessor:
         graphics.picture.save_picture(file_name=file_name)
 
 
-def main():
+def run():
     # Constants
     inlet_velocity = 2.0
     inlet_1_name = "velocity-inlet-1"
@@ -164,4 +164,4 @@ def main():
 
 
 if __name__ == "__main__":
-    main()
+    run()
