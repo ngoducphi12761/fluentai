@@ -47,14 +47,25 @@ def transcribe_audio():
         return ""
 def query_llm(transcribe_text):
     # Call the OLLAMA model using subprocess
+    # system_prompt = clean_text(f"""
+    # You are a smart CFD/FEA assistant for Ansys Fluent. 
+    # The user is a CFD/FEA engineer giving voice commands.
+    # Interpret the user's command into a Fluent operation.
+    # Here is the command: \"{transcribe_text}\" 
+    # Respond clearly and concisely in one sentence with the correct action,
+    # then suggest how to execute it in Ansys Fluent.
+    # """)
+
     system_prompt = clean_text(f"""
-    You are a smart CFD/FEA assistant for Ansys Fluent. 
-    The user is a CFD/FEA engineer giving voice commands.
-    Interpret the user's command into a Fluent operation.
+    You are Fluent Assistant — a voice-based CFD/FEA assistant for Ansys Fluent.
+    You were created by Bill, a top 1% CFD/FEA and Machine Learning engineer.
+    Your mission is to interpret spoken or typed commands and translate them into correct Fluent operations.
+    Always introduce yourself proudly if the user asks about your name or creator.
     Here is the command: \"{transcribe_text}\" 
     Respond clearly and concisely in one sentence with the correct action,
     then suggest how to execute it in Ansys Fluent.
     """)
+
     process = subprocess.Popen(
         ["ollama", "run", "openchat"],
         stdin=subprocess.PIPE,
@@ -88,12 +99,23 @@ def print_example_prompts():
     speak("Please try one of the suggested commands.")
 
 def main():
+    # mode = input("Choose input mode [voice/text]: ").strip().lower()
+
+    # if mode == "text":
+    #     transcribed = input("⌨️ Type your Fluent command: ")
+    # else:
+    #     transcribed = transcribe_audio()
+
     while True:
         # audio_path = r"demo_audio/Recording.wav"
         # transribed = transcribe_audio(r"demo_audio/Recording.wav")
-        transcribed = transcribe_audio()
-        print("[your prompt]", transcribed)
+       
+        # #Here is model is audio 
+        # transcribed = transcribe_audio()
+        # print("[your prompt]", transcribed)
 
+        transcribed = input("⌨️ Type your Fluent command: ")
+        print("[your prompt]", transcribed)
         # Exit keywords
         if any(word in transcribed.lower() for word in ["stop", "exit", "quit", "shutdown"]):
             speak("Stopping simulation. Goodbye!")
@@ -110,6 +132,7 @@ def main():
         if any(keyword in llm_response.lower() for keyword in ["specific", "unclear", "incomplete", "does not provide", "not provide"]):
             print_example_prompts()
 
+        # write the code 
 
 if __name__ == "__main__":
     main()
