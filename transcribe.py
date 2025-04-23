@@ -114,7 +114,7 @@ def main():
         # transcribed = transcribe_audio()
         # print("[your prompt]", transcribed)
 
-        transcribed = input("⌨️ Type your Fluent command: ")
+        transcribed = input("⌨️ Ask anything about Fluent: ")
         print("[your prompt]", transcribed)
         # Exit keywords
         if any(word in transcribed.lower() for word in ["stop", "exit", "quit", "shutdown"]):
@@ -133,6 +133,8 @@ def main():
             print_example_prompts()
 
         # write the code 
+        if any(keyword in llm_response.lower() for keyword in ["run simulation", "run the simulation", "start simulation", "start the solver"]):
+            fluent.run()
 
 if __name__ == "__main__":
     main()
