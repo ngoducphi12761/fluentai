@@ -1,10 +1,6 @@
 # === RAG + LLM Enhanced Architecture for FluentAi (Latest LangChain & LLM) ===
-
-# This architecture follows the Vitalflux.com RAG-LLM blueprint,
-# now upgraded to use the latest versions of LangChain (v0.3+) and LLM/embedding libraries.
-
 # ------------------------------------------------------
-# 📁 Project Structure
+# 📁 Project Structure 
 # ------------------------------------------------------
 # FluentAi/
 # ├── main.py                  # Main CLI/voice app loop
@@ -17,7 +13,7 @@
 # ├── knowledge/               # Fluent docs, code, PDFs, Markdown, etc.
 # └── vector_store/            # FAISS/Chroma vector DB output
 
-
+# Mr. Bill — Duc Phi Ngo is architecting and developing this project. 
 
 from rag.embed_documents import run_embedding
 from rag.vector_search import retrieve_context
