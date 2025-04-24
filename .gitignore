@@ -5,7 +5,9 @@ pyfluent-env/
 __pycache__/
 *.py[cod]
 *.so
+*.pdf
 *.egg
+*.trn
 *.egg-info/
 dist/
 build/
