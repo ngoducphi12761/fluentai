@@ -9,8 +9,11 @@ __pycache__/
 *.egg
 *.trn
 *.egg-info/
+*.log
+vector_store/*.pkl
 dist/
 build/
+FM_Duc_Phi_Ngo_25088/
 
 # Jupyter Notebook checkpoints
 .ipynb_checkpoints/
