@@ -50,15 +50,24 @@ def run_fluent_assistant():
             prompt = build_prompt(context, transcribed)
 
           # Debug: Print the transcribed input
-        print("[prompt]", prompt)
+        #print("[prompt]", prompt)
         llm_response = query_llm(prompt)
         print("[LLM Response]", llm_response)
         #Execute the LLM response if it contains Fluent code
-        if "fluent." in llm_response or "fluent.run" in llm_response:
+        # Trigger execution if matched as a simulation command or Fluent function
+        if "fluent." in llm_response or "fluent.run" in llm_response or any(
+            phrase in transcribed.lower() for phrase in ["run the tutorial", "run the calculation", "start simulation", 
+                                                         "start the solver", "run the solver", "start the simulation", 
+                                                         "run the analysis", "execute the code", "run simulation",
+                                                         "run the simulaiton", "execute the tutorial", "execute tutorial"]
+        ):
             try:
+                # If LLM didn't generate code, use fallback to run()
+                if not llm_response.startswith("fluent."):
+                    llm_response = "fluent.run()"
                 exec("import fluent_automation as fluent\n" + llm_response)
             except Exception as e:
-                print("Execution failed:", e)
+                print("❌ Execution failed:", e)
 
 if __name__ == "__main__":
     run_fluent_assistant()
