@@ -1,6 +1,6 @@
 import os
+import yaml
 import ansys.fluent.core as pyfluent
-
 
 class FluentMeshing:
     """Handles meshing operations in Fluent."""
@@ -46,7 +46,6 @@ class FluentMeshing:
         )
         workflow.TaskObject['Generate the Volume Mesh'].Execute()
 
-
 class FluentSolver:
     """Handles solver operations in Fluent."""
 
@@ -81,7 +80,6 @@ class FluentSolver:
         self.solver.solution.initialization.hybrid_initialize()
         self.solver.settings.solution.run_calculation.iter_count = iterations
         self.solver.settings.solution.run_calculation.iterate()
-
 
 class FluentPostProcessor:
     """Handles post-processing operations in Fluent."""
@@ -121,16 +119,19 @@ class FluentPostProcessor:
         graphics.views.auto_scale()
         graphics.picture.save_picture(file_name=file_name)
 
+def load_inputs(yaml_path="input.yaml"):
+    with open(yaml_path, 'r') as f:
+        return yaml.safe_load(f)
 
 def run():
-    # Constants
-    inlet_velocity = 2.0
-    inlet_1_name = "velocity-inlet-1"
-    inlet_2_name = "velocity-inlet-2"
-    temperature = 300.0
-    iterations = 200
-    geometry_file = "Static Mixer geometry.dsco"
-    geometry_path = os.path.join("geometry", geometry_file)
+    # Load simulation inputs from input.yaml
+    inputs = load_inputs()
+
+    inlet_settings = inputs["velocity_inlets"]
+    iterations = inputs["iterations"]
+    geometry_path = inputs["geometry_file"]
+
+    post_settings = inputs["post_processing"]
 
     # Meshing
     meshing = FluentMeshing()
@@ -139,29 +140,41 @@ def run():
 
     # Solver
     solver = FluentSolver(meshing.session)
-    solver.set_velocity_inlet(inlet_1_name, inlet_velocity, temperature)
-    solver.set_velocity_inlet(inlet_2_name, inlet_velocity, temperature)
+
+    # Set velocity inlet boundary conditions
+    for inlet in inlet_settings:
+        solver.set_velocity_inlet(
+            inlet_name=inlet["inlet_name"],
+            velocity=inlet["velocity"],
+            temperature=inlet["temperature"]
+        )
+
     solver.initialize_and_run(iterations)
 
     # Post-processing
     post_processor = FluentPostProcessor(solver.solver)
-    post_processor.create_and_save_contour(
-        "velocity_contour", "velocity-magnitude", ["pressure-outlet"], "velocity.png"
+
+    post_processor.create_plane_slice(
+        name=post_settings["create_plane_slice"]["name"],
+        origin=post_settings["create_plane_slice"]["origin"],
+        normal=post_settings["create_plane_slice"]["normal"]
     )
+
     post_processor.create_and_save_contour(
-        "temperature_contour", "temperature", ["pressure-outlet"], "temperature.png"
+        name=post_settings["create_contour"]["name"],
+        field=post_settings["create_contour"]["field"],
+        surfaces_list=post_settings["create_contour"]["surfaces"],
+        file_name=post_settings["create_contour"]["file_name"]
     )
-    post_processor.create_plane_slice("center_yz_plane", origin=[0.0, 0.0, 0.0], normal=[1.0, 0.0, 0.0])
-    post_processor.create_and_save_contour(
-        "yz_plane_velocity", "velocity-magnitude", ["center_yz_plane"], "yz_plane_velocity.png"
-    )
+
     post_processor.create_and_save_vector(
-        "velocity_yz_plane", "velocity-magnitude", ["center_yz_plane"], "velocity_yz_plane.png"
+        name=post_settings["create_vector"]["name"],
+        field=post_settings["create_vector"]["field"],
+        surfaces_list=post_settings["create_vector"]["surfaces"],
+        file_name=post_settings["create_vector"]["file_name"]
     )
 
-    # Keep the script alive interactively
     input("Press Enter to exit and close Fluent session...")
-
 
 if __name__ == "__main__":
     run()
