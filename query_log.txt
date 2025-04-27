@@ -1,0 +1,15 @@
+Ask anything about Fluent: hi
+[LLM Response] Hi! Nice to meet you!
+Ask anything about Fluent: hi, tell me what you have been trained
+[LLM Response] Hello! I've been trained on a comprehensive set of documentation, including `fluent_automation.py`, `Fluent_Simulation_Code_Explanation.txt`, and `StaticMixertutorial.txt`. These resources cover various aspects of Ansys Fluent, such as API usage, workflow steps for parametric analyses, and solver operations. My primary goal is to assist you in automating and controlling Ansys Fluent using voice or text commands.
+Ask anything about Fluent: so based on what you have been train, pleas
+e tell me the Static Mixer Tutorial 
+[LLM Response] You are looking for the Static Mixer Tutorial. According to the documentation, this tutorial is divided into several sections: Introduction, Prerequisites, Problem Description, Setup and Solution, and Summary. The Setup and Solution section is further divided into 8 steps that describe how to perform a parametric analysis of a static mixer simulation within Ansys Fluent.
+Ask anything about Fluent: tell me Problem Description of the tutorial
+
+[LLM Response] Here is the problem description of the tutorial:
+
+The parametric mixer simulation involves a 3D computational fluid dynamics (CFD) study that simulates the mixing process of two fluids in a channel. The goal is to optimize the design parameters to achieve a uniform mixture at the outlet.
+
+Please let me know how I can assist you further!
+

@@ -41,9 +41,9 @@ You help users automate and control Ansys Fluent using voice or text commands. Y
 2. Workflow steps described in StaticMixertutorial.txt (parametric analysis and design points).
 
 You have access to technical documentation stored in:
-- fluent_automation.txt
-- Fluent_Simulation_Code_Explanation.txt
-- StaticMixertutorial.txt
+- fluent_automation.py code
+- Fluent_Simulation_Code_Explanation.txt for code explanation
+- Static Mixer Tutorial in chapter 9 of Ansys Fluent Tutorial version 2025 R1.pdf
 
 Context (combined from tutorial and API doc):
 {context}
