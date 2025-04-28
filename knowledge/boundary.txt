@@ -1,0 +1,19 @@
+# Boundary Conditions in CFD (focused on Velocity Inlets)
+
+A "velocity inlet" is a type of boundary condition where the velocity magnitude or vector of the incoming fluid is specified. 
+It is typically used when the velocity of the fluid entering the domain is known. 
+Velocity inlets can be defined for compressible or incompressible flows.
+
+The user must specify:
+- Magnitude of the velocity (in m/s, ft/s, etc.)
+- Direction of flow (vector or normal to surface)
+- Turbulence parameters (optional): intensity and length scale or viscosity ratio.
+
+Common usage:
+- Inlets for fans, jets, intakes.
+- Simulation setups where flow rate control is required.
+
+Key Notes:
+- If multiple inlets exist, the same velocity can be assigned to all, or customized per inlet.
+- Typical simulation boundary names include "inlet-1", "inlet-2", etc.
+- Units must be consistent (e.g., SI: m/s).
