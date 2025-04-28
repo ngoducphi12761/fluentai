@@ -10,7 +10,9 @@ __pycache__/
 *.trn
 *.egg-info/
 *.log
+vector_store/*.faiss
 vector_store/*.pkl
+vector_store/*.json
 dist/
 build/
 FM_Duc_Phi_Ngo_25088/
