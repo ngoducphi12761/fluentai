@@ -21,6 +21,9 @@ from rag.prompt_template import build_prompt
 from rag.llm_gateway import query_llm
 import fluent_automation as fluent
 import unicodedata
+import json
+import utils.action_dispatcher as action_dispatcher
+from utils.extract_json import extract_json
 
 def speak(text):
     engine = pyttsx3.init()
@@ -50,24 +53,38 @@ def run_fluent_assistant():
             prompt = build_prompt(context, transcribed)
 
           # Debug: Print the transcribed input
-        #print("[prompt]", prompt)
+        # print("[prompt]", prompt)
         llm_response = query_llm(prompt)
-        print("[LLM Response]", llm_response)
+        # action_plan = json.loads(llm_response)
+
+        try:
+            action_plan = extract_json(llm_response)
+            print("[Action Plan]", action_plan)
+            # Proceed to dispatch and execute
+            action_dispatcher.execute_action_plan(action_plan)
+        except ValueError:
+            # If it's a general natural language reply, just print
+            print("[General LLM Response]", llm_response)
+
+
+            print("[LLM Response]", llm_response)
+        
+       
         #Execute the LLM response if it contains Fluent code
         # Trigger execution if matched as a simulation command or Fluent function
-        if "fluent." in llm_response or "fluent.run" in llm_response or any(
-            phrase in transcribed.lower() for phrase in ["run the tutorial", "run the calculation", "start simulation", 
-                                                         "start the solver", "run the solver", "start the simulation", 
-                                                         "run the analysis", "execute the code", "run simulation",
-                                                         "run the simulaiton", "execute the tutorial", "execute tutorial"]
-        ):
-            try:
-                # If LLM didn't generate code, use fallback to run()
-                if not llm_response.startswith("fluent."):
-                    llm_response = "fluent.run()"
-                exec("import fluent_automation as fluent\n" + llm_response)
-            except Exception as e:
-                print("❌ Execution failed:", e)
+        # if "fluent." in llm_response or "fluent.run" in llm_response or any(
+        #     phrase in transcribed.lower() for phrase in ["run the tutorial", "run the calculation", "start simulation", 
+        #                                                  "start the solver", "run the solver", "start the simulation", 
+        #                                                  "run the analysis", "execute the code", "run simulation",
+        #                                                  "run the simulaiton", "execute the tutorial", "execute tutorial"]
+        # ):
+        #     try:
+        #         # If LLM didn't generate code, use fallback to run()
+        #         if not llm_response.startswith("fluent."):
+        #             llm_response = "fluent.run()"
+        #         exec("import fluent_automation as fluent\n" + llm_response)
+        #     except Exception as e:
+        #         print("❌ Execution failed:", e)
 
 if __name__ == "__main__":
     run_fluent_assistant()
