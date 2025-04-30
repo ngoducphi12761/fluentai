@@ -14,6 +14,7 @@ __pycache__/
 *.bat
 *.ipynb_checkpoints
 *.ipynb
+*.bak.*
 vector_store/*.faiss
 vector_store/*.pkl
 vector_store/*.json
