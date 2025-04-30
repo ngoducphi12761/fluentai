@@ -2,6 +2,11 @@ import os
 import yaml
 import ansys.fluent.core as pyfluent
 
+from ansys.fluent.visualization import set_config
+from ansys.fluent.visualization.matplotlib import Plots
+from ansys.fluent.visualization.pyvista import Graphics
+
+
 class FluentMeshing:
     """Handles meshing operations in Fluent."""
 
@@ -62,6 +67,10 @@ class FluentSolver:
         solver.setup.models.energy = {'enabled': True}
         solver.settings.setup.materials.database.copy_by_name(type="fluid", name="water-liquid")
         solver.settings.setup.cell_zone_conditions.fluid()
+
+         # Setup turbulence model
+        solver.settings.setup.models.viscous.model = "k-epsilon"
+        solver.settings.setup.models.viscous.k_epsilon_model = "realizable" 
         return solver
 
     def set_velocity_inlet(self, inlet_name, velocity, temperature):
@@ -80,6 +89,24 @@ class FluentSolver:
         self.solver.solution.initialization.hybrid_initialize()
         self.solver.settings.solution.run_calculation.iter_count = iterations
         self.solver.settings.solution.run_calculation.iterate()
+
+    def set_turbulence_model(self, model_type, sub_model=None):
+        """Set turbulence model using a dictionary-style assignment."""
+        if model_type == "k-epsilon":
+            self.solver.setup.models.viscous = {
+                "model": "k-epsilon",
+                "k_epsilon_model": sub_model or "realizable"
+            }
+        elif model_type == "k-omega":
+            self.solver.setup.models.viscous = {
+                "model": "k-omega",
+                "k_omega_model": sub_model or "sst"
+            }
+        else:
+            self.solver.setup.models.viscous = {
+                "model": model_type
+            }
+
 
 class FluentPostProcessor:
     """Handles post-processing operations in Fluent."""

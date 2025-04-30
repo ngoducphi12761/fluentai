@@ -24,6 +24,10 @@ import unicodedata
 import json
 import utils.action_dispatcher as action_dispatcher
 from utils.extract_json import extract_json
+from utils.detect_action import is_action_command
+from bark import generate_audio
+
+from utils.speak_gtts import speak_gtts
 
 def speak(text):
     engine = pyttsx3.init()
@@ -42,33 +46,46 @@ def run_fluent_assistant():
             break
         transcribed = clean_text(transcribed)
         context = retrieve_context(transcribed)
+        # Debug: Print the context retrieved
+        # print("[Context]", context)
         # Fallback to general-purpose if context is empty
-        if not context.strip():
-            # print("No relevant to Fluent Domain.")
-            # speak("No relevant to Fluent Domain.")
-            transcribed = f"Answer the following as FluentAi, a voice assistant created by Mr. Bill (Duc Phi Ngo): {transcribed}"
-            transcribed = clean_text(transcribed)
-            prompt = transcribed
+        # if not context.strip():
+        #     # print("No relevant to Fluent Domain.")
+        #     # speak("No relevant to Fluent Domain.")
+        #     transcribed = f"Answer the following as FluentAi, a voice assistant created by Mr. Bill (Duc Phi Ngo): {transcribed}"
+        #     transcribed = clean_text(transcribed)
+        #     prompt = transcribed
+        # else:
+        #     prompt = build_prompt(context, transcribed)
+        if context.strip():
+    # ✅ Context found
+            if is_action_command(transcribed):
+                prompt = build_prompt(context, transcribed, mode="action")
+            else:
+                prompt = build_prompt(context, transcribed, mode="question")
         else:
-            prompt = build_prompt(context, transcribed)
+            # ✅ No relevant Fluent context found → fallback general polite
+            prompt = f"Answer the following naturally as FluentAi: {transcribed}"
+
 
           # Debug: Print the transcribed input
         # print("[prompt]", prompt)
         llm_response = query_llm(prompt)
         # action_plan = json.loads(llm_response)
-
+        # print("[LLM Response]", llm_response)
         try:
             action_plan = extract_json(llm_response)
-            print("[Action Plan]", action_plan)
+            # print("[Action Plan]", action_plan)
             # Proceed to dispatch and execute
             action_dispatcher.execute_action_plan(action_plan)
         except ValueError:
             # If it's a general natural language reply, just print
-            print("[General LLM Response]", llm_response)
-
-
+            # print("[General LLM Response]", llm_response)
             print("[LLM Response]", llm_response)
-        
+            speak_gtts(llm_response)
+                # ✅ Add Bark to generate human-like voice
+            # audio_array = generate_voice(llm_response)
+            # play_audio(audio_array)
        
         #Execute the LLM response if it contains Fluent code
         # Trigger execution if matched as a simulation command or Fluent function
@@ -85,6 +102,20 @@ def run_fluent_assistant():
         #         exec("import fluent_automation as fluent\n" + llm_response)
         #     except Exception as e:
         #         print("❌ Execution failed:", e)
+        # --- After processing the LLM Response ---
+        if any(phrase in transcribed.lower() for phrase in [
+            "start the simulation", "run automation", "run simulation", 
+            "begin the simulation", "launch the solver", "execute simulation"
+        ]):
+            try:
+                message = "🚀 Launching Fluent simulation now..."
+                print(message)
+                speak_gtts(message)
+                # audio_array = generate_voice(message)
+                # play_audio(audio_array)
+                fluent.run()  # This calls your fluent_automation.py run() function
+            except Exception as e:
+                print(f"❌ Failed to run simulation: {e}")
 
 if __name__ == "__main__":
     run_fluent_assistant()

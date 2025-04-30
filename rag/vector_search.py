@@ -35,5 +35,4 @@ print("✅ vector_store_export.json saved.")
 def retrieve_context(query):
     docs = vector_db.similarity_search(query, k=4)
     string = "\n".join([doc.page_content for doc in docs])
-    print("[query]: " + string)
     return string
