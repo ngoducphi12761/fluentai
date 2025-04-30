@@ -1,12 +1,17 @@
 geometry_file: geometry/Static Mixer geometry.dsco
-iterations: 50
+iterations: 2
+
+turbulence_model:
+  model: k-omega
+  sub_model: sst
+
 post_processing:
   create_contour:
     field: velocity-magnitude
     file_name: velocity.png
     name: velocity_contour
     surfaces:
-    - pressure-outlet
+    - pressure_outlet
   create_plane_slice:
     name: yz_plane
     normal:
@@ -23,11 +28,11 @@ post_processing:
     name: velocity_yz_plane
     surfaces:
     - yz_plane
-turbulence_model: k-omega
+
 velocity_inlets:
-- inlet_name: velocity-inlet-1
-  temperature: 320.0
-  velocity: 10.0
-- inlet_name: velocity-inlet-2
-  temperature: 300.0
+- inlet_name: velocity_inlet_1
+  temperature: 330.0
   velocity: 12.0
+- inlet_name: velocity_inlet_2
+  temperature: 310.0
+  velocity: 1.0

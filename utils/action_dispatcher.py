@@ -37,4 +37,4 @@ def execute_action_plan(action_plan: list):
 
     # 🔥 Save all changes once at the end
     yaml_editor.save_yaml()
-    print("✅ All actions executed and YAML saved successfully.")
+    print("✅ All actions ./ and YAML saved successfully.")
