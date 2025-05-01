@@ -90,7 +90,7 @@ In modern simulation workflows, engineers lose productivity to:
      │ Action Dispatcher (PyFluent)  │
      └───────────────────────────────┘
 
-
+```
 ### Voice Output
 Currently powered by **Google Text-to-Speech (GTTS)** for demo simplicity.
 Will be upgraded to **Bark or ElevenLabs** in future versions for more natural, production-ready voice output
