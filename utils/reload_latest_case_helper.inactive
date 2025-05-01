@@ -1,0 +1,41 @@
+import shutil
+
+def reload_latest_case(output_folder):
+    """
+    Finds the most recent output_* folder, copies the .cas.h5 file into the new output folder,
+    loads it into Fluent, and returns a FluentSolver instance and the case path.
+    """
+    # Find latest output_* folder (excluding the current one)
+    all_output_folders = sorted(
+        [f for f in os.listdir() if f.startswith("output_") and os.path.isdir(f)],
+        reverse=True
+    )
+    
+    latest_folder = None
+    for folder in all_output_folders:
+        full_path = os.path.abspath(folder)
+        if full_path != output_folder:
+            latest_folder = full_path
+            break
+
+    if not latest_folder:
+        raise FileNotFoundError("No previous output_* folder found for rerun.")
+
+    # Find the .cas.h5 file in that folder
+    cas_files = [f for f in os.listdir(latest_folder) if f.endswith(".cas.h5")]
+    if not cas_files:
+        raise FileNotFoundError("No .cas.h5 file found in latest output folder.")
+
+    cas_filename = cas_files[0]
+    src_case_path = os.path.join(latest_folder, cas_filename)
+    dst_case_path = os.path.join(output_folder, cas_filename)
+
+    # Copy the .cas.h5 to the new output folder
+    shutil.copy2(src_case_path, dst_case_path)
+
+    # Launch Fluent and read the case
+    session = pyfluent.launch_fluent(show_gui=True)
+    session.file.read_case(file_name=os.path.abspath(dst_case_path))
+
+    solver = FluentSolver(session)
+    return solver, dst_case_path

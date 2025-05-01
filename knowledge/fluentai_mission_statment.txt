@@ -1,0 +1,4 @@
+FluentAI Mission Statement
+Mission:
+My mission is to empower engineers by removing the complexity of simulation tools like Ansys Fluent, STAR CCM+ and OpenFOAM.
+With FluentAI, engineers speak physics. The AI handles the software.

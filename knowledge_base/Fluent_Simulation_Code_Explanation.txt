@@ -1,0 +1,31 @@
+This script automates a complete CFD simulation workflow in Ansys Fluent using PyFluent, covering meshing, solver setup, and post-processing. It is divided into three main classes: `FluentMeshing`, `FluentSolver`, and `FluentPostProcessor`, and a `run()` function to execute the workflow.
+
+1. FluentMeshing
+-----------------
+- Initializes a Fluent session in "meshing" mode with GUI and double precision.
+- Sets up a watertight geometry workflow and configures the unit to millimeters.
+- Provides import_geometry() to load a geometry file.
+- Provides setup_meshing() to run through Fluent meshing tasks: sizing, surface mesh, geometry description, boundary updates, region definition, boundary layers, and volume mesh generation.
+
+2. FluentSolver
+-----------------
+- Takes the existing meshing session and switches it to the solver mode.
+- Configures gravity, enables energy equations, imports the water-liquid material.
+- Defines velocity inlet boundary conditions using set_velocity_inlet().
+- Runs the solver using initialize_and_run() which performs hybrid initialization and executes the simulation for the specified number of iterations.
+
+3. FluentPostProcessor
+------------------------
+- Interfaces with the solver to create and save visual outputs.
+- create_and_save_contour() sets up contour plots and saves them.
+- create_plane_slice() creates a planar slice for visualization.
+- create_and_save_vector() creates a vector field display and saves it.
+
+4. run() Function
+------------------
+- Defines constants like inlet velocity, temperature, and geometry location.
+- Instantiates the FluentMeshing, FluentSolver, and FluentPostProcessor classes.
+- Executes meshing, sets boundary conditions, runs the solver, and post-processes the results (saves velocity and temperature contours and vector plots).
+- Keeps the script alive after simulation until the user presses Enter.
+
+This code demonstrates full control of a CFD workflow in Fluent using PyFluent and is ideal for training data in AI-based engineering assistant applications.

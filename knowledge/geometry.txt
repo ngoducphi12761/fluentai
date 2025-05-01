@@ -1,0 +1,13 @@
+
+Geometry Overview:
+The Geometry uses a static mixer with the following key boundaries:
+
+velocity-inlet-1: Main inlet with high-speed flow to drive mixing.
+
+velocity-inlet-2: Secondary inlet with lower-speed, warmer fluid for thermal mixing.
+
+wall: Solid boundary confining the flow, used for heat and shear analysis.
+
+pressure-outlet: Outlet for mixed fluid, set to a fixed pressure.
+
+This setup models the mixing of two streams in a confined domain.
