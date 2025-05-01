@@ -6,7 +6,9 @@ def is_action_command(user_query: str) -> bool:
     action_keywords = [
         "set", "update", "change", "switch", 
         "run", "configure", "assign", "modify",
-        "make it run"
+        "execute the simulation", "start the simulation",
+        "make it run", "launch the solver",
+        "rerun the simulation", "rerun simulation"
     ]
 
     user_query_lower = user_query.lower()

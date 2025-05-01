@@ -308,6 +308,8 @@ def run():
     solver.solver.file.write_case(file_name=case_path)
     print(f"✅ Fluent case file saved: {case_path}")
 
-    input("Press Enter to exit and close Fluent session...")
+    # input("Press Enter to exit and close Fluent session...")
+    solver.solver.exit()
+    # Close the session and clean up
 if __name__ == "__main__":
     run()

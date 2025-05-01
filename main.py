@@ -78,6 +78,32 @@ def run_fluent_assistant():
             # print("[Action Plan]", action_plan)
             # Proceed to dispatch and execute
             action_dispatcher.execute_action_plan(action_plan)
+        
+            # if any(phrase in transcribed.lower() for phrase in [
+            # "start the automation", "run the automation", "run simulation", 
+            # "begin the automation", "launch the solver", "execute simulation", "run the automation",
+            # "rerun the automation" , "rerun the simulation"
+            # ]):
+            #     try:
+            #         message = "🚀 Launching Fluent simulation now..."
+            #         print(message)
+            #         speak_gtts(message)
+            #         # audio_array = generate_voice(message)
+            #         # play_audio(audio_array)
+            #         fluent.run()  # This calls your fluent_automation.py run() function
+            #     except Exception as e:
+            #         print(f"❌ Failed to run simulation: {e}")
+            for action in action_plan:
+                if action["action"] == "rerun_simulation":
+                    if action["parameters"].get("rerun", False) is True:
+                        print("🔁 Rerunning Fluent simulation now...")
+                        speak_gtts("Rerunning Fluent simulation now.")
+                        fluent.run()
+                    elif action["parameters"].get("rerun", False) is False:
+                        print("🚀 Launching Fluent simulation now...")
+                        speak_gtts("Launching Fluent simulation now")
+                        fluent.run()
+
         except ValueError:
             # If it's a general natural language reply, just print
             # print("[General LLM Response]", llm_response)
@@ -103,19 +129,7 @@ def run_fluent_assistant():
         #     except Exception as e:
         #         print("❌ Execution failed:", e)
         # --- After processing the LLM Response ---
-        if any(phrase in transcribed.lower() for phrase in [
-            "start the simulation", "run automation", "run simulation", 
-            "begin the simulation", "launch the solver", "execute simulation"
-        ]):
-            try:
-                message = "🚀 Launching Fluent simulation now..."
-                print(message)
-                speak_gtts(message)
-                # audio_array = generate_voice(message)
-                # play_audio(audio_array)
-                fluent.run()  # This calls your fluent_automation.py run() function
-            except Exception as e:
-                print(f"❌ Failed to run simulation: {e}")
+
 
 if __name__ == "__main__":
     run_fluent_assistant()

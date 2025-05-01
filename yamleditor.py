@@ -39,7 +39,7 @@ class YAMLEditor:
             self.save_yaml()
         message = f"✅ Updated {inlet_name} velocity to {new_velocity} m/s"
         print(message)
-        speak_gtts(message)
+        speak_gtts("Updated {inlet_name} velocity to {new_velocity} m/s")
 
     def update_inlet_temperature(self, inlet_name, new_temperature, save=True):
         """Update temperature value for a specific inlet."""
@@ -57,7 +57,7 @@ class YAMLEditor:
             self.save_yaml()
         message = f"✅ Updated {inlet_name} temperature to {new_temperature} K"
         print(message)
-        speak_gtts(message)
+        speak_gtts("Updated {inlet_name} temperature to {new_temperature} K")
 
     def update_all_inlet_velocities(self, new_velocity, save=True):
         """Update velocity value for all inlets."""
@@ -69,7 +69,7 @@ class YAMLEditor:
                 self.save_yaml()
             message = f"✅ Updated all inlets to velocity {new_velocity} m/s"
             print(message)
-            speak_gtts(message)
+            speak_gtts("Updated all inlets to velocity {new_velocity} m/s")
         else:
             raise ValueError("No 'velocity_inlets' section found in input.yaml.")
 
@@ -80,7 +80,7 @@ class YAMLEditor:
             self.save_yaml()
         message = f"✅ Set turbulence model to {model_name}"
         print(message)
-        speak_gtts(message)
+        speak_gtts("Set turbulence model to {model_name}")
 
     def update_iterations(self, iteration_count=100, save=True):
         """Update number of solver iterations."""
@@ -89,7 +89,17 @@ class YAMLEditor:
             self.save_yaml()
         message = f"✅ Set iterations to {iteration_count}"
         print(message)
-        speak_gtts(message)
+        speak_gtts("Set iterations to {iteration_count}")
+        
+    def toggle_rerun_case(self, status: bool, save=True):
+        self.data["rerun_case"] = status  # Now store as a proper boolean
+        if save:
+            self.save_yaml()
+        state = "enabled" if status else "disabled"
+        if status:
+            message = f"✅ Rerun case is now {state}"
+            print(message)
+            speak_gtts("Rerun case is now {state}")
 
 # Example usage
 if __name__ == "__main__":

@@ -32,6 +32,10 @@ def execute_action_plan(action_plan: list):
             iteration_count = parameters.get("iterations")
             yaml_editor.update_iterations(iteration_count, save=False)
 
+        elif action_type == "rerun_simulation":
+            rerun = parameters.get("rerun")
+            yaml_editor.toggle_rerun_case(rerun, save=False)
+
         else:
             print(f"⚠️ Warning: Unknown action type '{action_type}' — skipping.")
 

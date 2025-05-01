@@ -20,7 +20,7 @@ vector_store/*.pkl
 vector_store/*.json
 dist/
 build/
-FM_Duc_Phi_Ngo_25088/
+FM_Duc_Phi_Ngo_*/
 VITS-fast-fine-tuning/
 
 # Jupyter Notebook checkpoints
