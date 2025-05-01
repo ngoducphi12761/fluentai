@@ -1,6 +1,6 @@
 # FluentAI – Autonomous CFD Simulation Assistant Powered by RAG, LLMs, and Rule-Based Reasoning
 
-> Created by **Duc Phi Ngo (Mr. Bill)** — a highly experienced CFD/FEA engineer and AI/ML software developer, FluentAI bridges physics-based simulation with intelligent automation through structured reasoning and multimodal control.
+> Created by **Duc Phi Ngo (Mr. Bill)** — a senior CFD/FEA engineer and AI/ML software developer, FluentAI bridges physics-based simulation with intelligent automation through structured reasoning and multimodal control.
 
 ---
 
