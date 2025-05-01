@@ -1,10 +1,11 @@
 import os
 import yaml
 import ansys.fluent.core as pyfluent
+import datetime
 
-from ansys.fluent.visualization import set_config
-from ansys.fluent.visualization.matplotlib import Plots
-from ansys.fluent.visualization.pyvista import Graphics
+# from ansys.fluent.visualization import set_config
+# from ansys.fluent.visualization.matplotlib import Plots
+# from ansys.fluent.visualization.pyvista import Graphics
 
 
 class FluentMeshing:
@@ -111,8 +112,9 @@ class FluentSolver:
 class FluentPostProcessor:
     """Handles post-processing operations in Fluent."""
 
-    def __init__(self, solver):
+    def __init__(self, solver, output_folder):
         self.solver = solver
+        self.output_folder = output_folder
 
     def create_and_save_contour(self, name, field, surfaces_list, file_name):
         """Create, display, and save a contour plot."""
@@ -120,21 +122,34 @@ class FluentPostProcessor:
         self.solver.settings.results.graphics.contour[name](
             field=field,
             surfaces_list=surfaces_list
+            #surfaces=surfaces_list
         )
         self.solver.settings.results.graphics.contour[name].display()
         self.solver.settings.results.graphics.views.auto_scale()
-        self.solver.settings.results.graphics.picture.save_picture(file_name=file_name)
+        # file_path = os.path.join(self.output_folder, file_name)
+        file_path = os.path.abspath(os.path.join(self.output_folder, file_name))
+        self.solver.settings.results.graphics.picture.save_picture(file_name=file_path)
 
     def create_plane_slice(self, name, origin, normal):
         """Create a plane slice."""
         self.solver.results.surfaces.plane_slice.create(
             name=name,
-            origin=origin,
-            normal=normal
+            normal=normal,
+            distance_from_origin=origin
         )
+
+    # def create_plane_slice(self, name, origin, normal):
+    #     """Create a plane slice with specified origin and normal."""
+    #     self.solver.results.surfaces.plane_slice.create(name)
+    #     self.solver.results.surfaces.plane_slice[name].Arguments.set_state({
+    #         "origin": origin,
+    #         "normal": normal
+    #     })
 
     def create_and_save_vector(self, name, field, surfaces_list, file_name):
         """Create, display, and save a vector plot."""
+        # file_path = os.path.join(self.output_folder, file_name)
+        file_path = os.path.abspath(os.path.join(self.output_folder, file_name))
         graphics = self.solver.settings.results.graphics
         graphics.vector[name] = {}
         vector = graphics.vector[name]
@@ -144,13 +159,22 @@ class FluentPostProcessor:
         vector.display()
         graphics.views.restore_view(view_name="right")
         graphics.views.auto_scale()
-        graphics.picture.save_picture(file_name=file_name)
+        graphics.picture.save_picture(file_name=file_path)
 
 def load_inputs(yaml_path="input.yaml"):
     with open(yaml_path, 'r') as f:
         return yaml.safe_load(f)
 
+def normalize_path(path):
+    return path.replace("\\", "/")
+
 def run():
+
+# Create output folder with timestamp
+    timestamp = datetime.datetime.now().strftime("%Y%m%d_%H%M%S")
+    output_folder = os.path.abspath(f"output_{timestamp}")
+    os.makedirs(output_folder, exist_ok=True)
+
     # Load simulation inputs from input.yaml
     inputs = load_inputs()
 
@@ -159,8 +183,10 @@ def run():
     geometry_path = inputs["geometry_file"]
 
     post_settings = inputs["post_processing"]
-
-    # Meshing
+    geometry_basename = os.path.splitext(os.path.basename(geometry_path))[0]
+    case_filename = f"{geometry_basename}.cas.h5"
+    case_path = os.path.abspath(os.path.join(output_folder, case_filename))
+    # Meshings
     meshing = FluentMeshing()
     meshing.import_geometry(geometry_path)
     meshing.setup_meshing()
@@ -179,7 +205,7 @@ def run():
     solver.initialize_and_run(iterations)
 
     # Post-processing
-    post_processor = FluentPostProcessor(solver.solver)
+    post_processor = FluentPostProcessor(solver.solver, output_folder)
 
     post_processor.create_plane_slice(
         name=post_settings["create_plane_slice"]["name"],
@@ -187,12 +213,19 @@ def run():
         normal=post_settings["create_plane_slice"]["normal"]
     )
 
-    post_processor.create_and_save_contour(
-        name=post_settings["create_contour"]["name"],
-        field=post_settings["create_contour"]["field"],
-        surfaces_list=post_settings["create_contour"]["surfaces"],
-        file_name=post_settings["create_contour"]["file_name"]
-    )
+    # post_processor.create_and_save_contour(
+    #     name=post_settings["create_contour"]["name"],
+    #     field=post_settings["create_contour"]["field"],
+    #     surfaces_list=post_settings["create_contour"]["surfaces"],
+    #     file_name=post_settings["create_contour"]["file_name"]
+    # )
+    for contour in post_settings["create_contours"]:
+        post_processor.create_and_save_contour(
+            name=contour["name"],
+            field=contour["field"],
+            surfaces_list=contour["surfaces"],
+            file_name=contour["file_name"]
+        )
 
     post_processor.create_and_save_vector(
         name=post_settings["create_vector"]["name"],
@@ -201,7 +234,11 @@ def run():
         file_name=post_settings["create_vector"]["file_name"]
     )
 
-    input("Press Enter to exit and close Fluent session...")
+   
+    # ✅ Write the case file
+    solver.solver.file.write_case(file_name=case_path)
+    print(f"✅ Fluent case file saved: {case_path}")
 
+    input("Press Enter to exit and close Fluent session...")
 if __name__ == "__main__":
     run()

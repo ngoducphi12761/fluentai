@@ -6,12 +6,29 @@ turbulence_model:
   sub_model: sst
 
 post_processing:
-  create_contour:
-    field: velocity-magnitude
-    file_name: velocity.png
-    name: velocity_contour
-    surfaces:
-    - pressure_outlet
+  create_contours:
+    - field: velocity-magnitude
+      file_name: velocity.png
+      name: velocity_contour
+      surfaces:
+        - pressure-outlet
+    - field: temperature
+      file_name: temperature.png
+      name: temperature_contour
+      surfaces:
+        - velocity-inlet-1
+        - velocity-inlet-2
+    - field: temperature
+      file_name: temperature.png
+      name: temperature_wall_contour
+      surfaces:
+        - wall
+    - field: velocity-magnitude
+      file_name: velocity-magnitude-slice.png
+      name: temperature_yz_plane_contour
+      surfaces:
+        - yz_plane
+    
   create_plane_slice:
     name: yz_plane
     normal:
@@ -30,9 +47,9 @@ post_processing:
     - yz_plane
 
 velocity_inlets:
-- inlet_name: velocity_inlet_1
+- inlet_name: velocity-inlet-1
   temperature: 330.0
   velocity: 12.0
-- inlet_name: velocity_inlet_2
+- inlet_name: velocity-inlet-2
   temperature: 310.0
   velocity: 1.0
