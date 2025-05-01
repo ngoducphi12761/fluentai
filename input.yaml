@@ -1,6 +1,7 @@
 geometry_file: geometry/Static Mixer geometry.dsco
 iterations: 2
-
+#rerun_case: Yes
+rerun_case: Yes
 turbulence_model:
   model: k-omega
   sub_model: sst

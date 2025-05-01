@@ -2,7 +2,7 @@ import os
 import yaml
 import ansys.fluent.core as pyfluent
 import datetime
-
+import shutil
 # from ansys.fluent.visualization import set_config
 # from ansys.fluent.visualization.matplotlib import Plots
 # from ansys.fluent.visualization.pyvista import Graphics
@@ -54,9 +54,13 @@ class FluentMeshing:
 
 class FluentSolver:
     """Handles solver operations in Fluent."""
-
-    def __init__(self, meshing_session):
-        self.solver = self.initialize_solver(meshing_session)
+    def __init__(self, session, is_solver_mode=False):
+            if is_solver_mode:
+                self.solver = session  # already in solver mode
+            else:
+                self.solver = self.initialize_solver(session)
+    # def __init__(self, meshing_session):
+    #     self.solver = self.initialize_solver(meshing_session)
 
     @staticmethod
     def initialize_solver(meshing_session):
@@ -168,6 +172,57 @@ def load_inputs(yaml_path="input.yaml"):
 def normalize_path(path):
     return path.replace("\\", "/")
 
+def get_latest_output_folder(base_dir=".", exclude_folder=None):
+    """
+    Returns the absolute path to the most recently created output_* folder,
+    optionally excluding a specific folder.
+    """
+    folders = [
+        f for f in os.listdir(base_dir)
+        if f.startswith("output_") and os.path.isdir(os.path.join(base_dir, f))
+    ]
+    if not folders:
+        raise FileNotFoundError("No output folders found.")
+
+    sorted_folders = sorted(
+        folders,
+        key=lambda x: os.path.getctime(os.path.join(base_dir, x)),
+        reverse=True
+    )
+
+    for folder in sorted_folders:
+        abs_path = os.path.abspath(os.path.join(base_dir, folder))
+        if abs_path != exclude_folder:
+            return abs_path
+
+    raise FileNotFoundError("No valid previous output folder found for rerun.")
+
+
+def reload_case_from_folder(latest_folder, output_folder):
+    """
+    Loads the latest .cas.h5 file from the specified folder into Fluent,
+    and returns the solver and case path.
+    """
+    cas_files = [f for f in os.listdir(latest_folder) if f.endswith(".cas.h5")]
+    if not cas_files:
+        raise FileNotFoundError("No .cas.h5 file found in the specified folder.")
+
+    cas_filename = cas_files[0]
+    case_path = os.path.join(latest_folder, cas_filename)
+
+    session = pyfluent.launch_fluent(
+        show_gui=True,
+        mode="solver",
+        precision="double",
+        processor_count=4,
+        additional_arguments="-driver opengl"
+    )
+    session.file.read_case(file_name=os.path.abspath(case_path))
+
+    solver = FluentSolver(session, True)
+    case_path = os.path.join(output_folder, cas_filename)
+    return solver, case_path
+
 def run():
 
 # Create output folder with timestamp
@@ -177,6 +232,7 @@ def run():
 
     # Load simulation inputs from input.yaml
     inputs = load_inputs()
+    
 
     inlet_settings = inputs["velocity_inlets"]
     iterations = inputs["iterations"]
@@ -186,13 +242,26 @@ def run():
     geometry_basename = os.path.splitext(os.path.basename(geometry_path))[0]
     case_filename = f"{geometry_basename}.cas.h5"
     case_path = os.path.abspath(os.path.join(output_folder, case_filename))
-    # Meshings
-    meshing = FluentMeshing()
-    meshing.import_geometry(geometry_path)
-    meshing.setup_meshing()
+    # geometry_basename = os.path.splitext(os.path.basename(geometry_path))[0]
+    # case_path = os.path.abspath(os.path.join(output_folder, case_filename))
+    # case_filename = f"{geometry_basename}.cas.h5"
 
-    # Solver
-    solver = FluentSolver(meshing.session)
+    if  inputs.get("rerun_case", False):
+        print("Rerunning the latest case...")
+        # os.makedirs(output_folder, exist_ok=True)
+        latest_folder = get_latest_output_folder(exclude_folder=output_folder)
+        solver, case_path = reload_case_from_folder(latest_folder, output_folder)
+    # Meshings
+    else:
+        
+        print("Running a new case...")
+        # os.makedirs(output_folder, exist_ok=True)
+        meshing = FluentMeshing()
+        meshing.import_geometry(geometry_path)
+        meshing.setup_meshing()
+
+        # Solver
+        solver = FluentSolver(meshing.session)
 
     # Set velocity inlet boundary conditions
     for inlet in inlet_settings:
