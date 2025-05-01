@@ -1,95 +1,96 @@
-# FluentAI – Autonomous CFD Simulation Assistant Powered by RAG + LLMs & Rule-Based Reasoning
+# FluentAI – Autonomous CFD Simulation Assistant Powered by RAG, LLMs, and Rule-Based Reasoning
 
-> Created by **Duc Phi Ngo (Mr. Bill)** — an experienced CFD/FEA engineer and AI/ML software developer, dedicated to bridging physics-based simulation with intelligent automation.
+> Created by **Duc Phi Ngo (Mr. Bill)** — a highly experienced CFD/FEA engineer and AI/ML software developer, FluentAI bridges physics-based simulation with intelligent automation through structured reasoning and multimodal control.
 
 ---
 
 ## Project Vision
-**FluentAI** integrates multiple technologies across AI/NLP, simulation automation, and software engineering domains to deliver an intelligent, voice-driven CFD assistant.
-**FluentAI** is an intelligent assistant that transforms how engineers interact with simulation tools like **Ansys Fluent**, **STAR-CCM+**, and **OpenFOAM**. It replaces GUI-driven workflows with **natural language commands**, powered by a fusion of:
 
-- **Retrieval-Augmented Generation (RAG)** for domain-aware memory
-- **LLM-driven reasoning (LLaMA 3 / GPT)** for understanding engineering tasks
-- **Rule-based action planning** for deterministic control and safe automation
+**FluentAI** redefines how engineers interact with simulation platforms like **Ansys Fluent**, **STAR-CCM+**, and **OpenFOAM**. By replacing GUI-based workflows with **natural language interaction**, FluentAI empowers users to control and automate simulation tasks using:
 
-The result is a **decision-making AI agent** capable of understanding, planning, and executing full CFD simulation pipelines — just from human voice or text.
+- 🔍 **Retrieval-Augmented Generation (RAG)** for context-aware knowledge recall  
+- 🧠 **LLM-driven reasoning (LLaMA 3 / GPT)** for understanding simulation logic  
+- ⚙️ **Rule-based action planning** to ensure reliable and deterministic execution  
+
+**FluentAI** is more than a chatbot — it's a decision-making agent capable of understanding, planning, and executing complete CFD workflows from voice or text input.
 
 ---
 
 ## Why It Matters
 
-In modern engineering environments, simulation experts waste significant time on:
-- Manual GUI operations across platforms
-- Repetitive setup and post-processing steps
-- Poor integration between engineering logic and AI tools
+In modern simulation workflows, engineers lose productivity to:
+- Repetitive GUI operations across platforms
+- Manual setup of simulation parameters and post-processing
+- Lack of intelligent interfaces for engineering software
 
-**FluentAI eliminates these bottlenecks** by acting as a fully programmable AI operator — capable of interpreting instructions, retrieving domain-specific context, and generating structured action plans for automated simulation execution.
+**FluentAI** eliminates these pain points by introducing:
+- A **multi-intent voice/text interface**
+- A **domain-aware LLM engine** that understands simulation language
+- A **deterministic automation layer** built on PyFluent and structured decision rules
 
 ---
 
-## ⚙️ Key Capabilities
+## Key Capabilities
 
-### Intelligent Multi-Modal Input
-- Voice or text commands interpreted via Whisper/GTTS
-- Multi-intent recognition: questions, knowledge queries, or executable instructions
+### Multimodal user input
+- Accepts both voice (via Google Speech-to-Text) and typed commands
+- Classifies intent as question, knowledge query, or action plan
 
 ### Retrieval-Augmented Generation (RAG)
-- FAISS/Chroma-based vector search over local engineering documents (YAMLs, PDFs, Fluent configs)
-- LangChain-powered retrieval from domain-specific sources
+- Uses FAISS/ChromaDB to retrieve relevant engineering documents (YAML, PDFs, Fluent settings)
+- Employs LangChain for structured RAG integration
 
-### AI & Natural Language Processing
-- **LLaMA 3** – Large Language Models for command understanding and reasoning
-- **Prompt Engineering + Rule-Based Parsing** – Interprets commands using deterministic and semantic rules
-- Uses enhanced prompts to:
-  - Extract structured commands from unstructured queries
-  - Apply **condition-action rules** for accurate interpretation
-  - Output **structured JSON action plans** to control Fluent simulation pipelines
+### AI and natural language processing
+- Powered by LLaMA 3 (or GPT-4) for contextual understanding and planning
+- Generates JSON-formatted **action plans** using deterministic prompt logic and condition-action rules
 
-### Deterministic Simulation Control
-- Action plans executed via PyFluent: meshing, boundary conditions, solver config, post-processing
-- Only support Steady flow for:
-  - Inlet velocity/temperature
-  - Turbulence model setup
-  - Solver iteration control
-  - Contour and plane slicing for visualization
-  - number of Iterations 
+### Deterministic simulation control
+- Executes structured commands through PyFluent API:
+  - Inlet velocity/temperature settings
+  - Turbulence model configuration
+  - Solver iteration count
+  - Post-processing (contours, plane slicing)
+- Currently supports **steady-state flow simulations**
 
-### CFD Automation
-  - Ansys PyFluent – Python API access for geometry import, meshing, solver setup, and post-processing
-  - Structured **input.yaml** – Declarative config for repeatable simulations
-  - JSON Action Plans – Machine-readable plans generated by the LLM for each user command
-### Software Engineering Stack
-- Python 3.10+ – Core development language
-- Modular Architecture – Isolated layers for NLP, retrieval, simulation control, and voice interface
-- Custom Action Dispatcher – Executes Fluent automation based on structured reasoning
-- CLI + Voice Loop – Dual-mode operation for demo and production use
+### Modular CFD automation
+- Uses a declarative `input.yaml` to define geometry, boundary conditions, solver settings, and outputs
+- Translates LLM decisions into **safe, auditable Fluent operations**
+
+### Software engineering stack
+- Python 3.10+, modular architecture
+- CLI + voice support for flexibility in demos and real use
+- Logs, temp files, and YAML for traceability and reproducibility
+
 ---
 
-## AI Architecture Overview
+## 📐 Architecture Overview
 
 ```text
-## 📐 Architecture Overview
-            ┌────────────────────┐
+            ┌──────────────────────┐
             │  User Input (Voice/Text)
-            └────────┬───────────┘
+            └──────────┬───────────┘
                      ↓
         ┌────────────────────────────┐
         │ Vector Search (FAISS + LangChain)
         └────────┬───────────────────┘
                  ↓
        ┌───────────────────────────────┐
-       │ Prompt Template + Rule Engine │  ← condition-action rules embedded
+       │ Prompt Template + Rule Engine │
        └────────┬──────────────────────┘
                 ↓
-           ┌───────────────┐
-           │  LLM (LLaMA 3)│  ← structured reasoning w/ context
-           └──────┬────────┘
-                  ↓
+           ┌────────────────────┐
+           │  LLM (LLaMA 3 / GPT) │
+           └────────┬───────────┘
+                    ↓
       ┌──────────────────────────────┐
-      │ JSON Action Plan Generator   │  ← decisions + execution plan
+      │ JSON Action Plan Generator   │
       └────────┬─────────────────────┘
                ↓
      ┌───────────────────────────────┐
-     │ Action Dispatcher (PyFluent)  │  ← CFD automation logic
+     │ Action Dispatcher (PyFluent)  │
      └───────────────────────────────┘
----
+
+
+### Voice Output
+Currently powered by **Google Text-to-Speech (GTTS)** for demo simplicity.
+Will be upgraded to **Bark or ElevenLabs** in future versions for more natural, production-ready voice output
