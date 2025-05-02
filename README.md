@@ -64,6 +64,7 @@ In modern simulation workflows, engineers lose productivity to:
 ---
 
 ## Fluentai Architecture Overview
+```
 User (Voice/Text)
     ↓
 [1] Whisper (Speech-to-Text)
