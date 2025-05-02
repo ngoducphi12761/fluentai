@@ -69,21 +69,23 @@ User (Voice/Text)
     ↓
 [1] Whisper (Speech-to-Text)
     ↓
-[2] LLM (LLaMA 3 / GPT-4)
+[2] RAG Engine
+    - Retrieves relevant CFD context from Vector Store (FAISS/Chroma)
+    - Combines with command to form enriched prompt
     ↓
-[3] RAG Engine
-    - Retrieves context from Knowledge Base via Vector Store (e.g., FAISS)
-    - Enhances prompts with CFD-specific logic
+[3] LLM (LLaMA 3 / GPT-4)
+    - Interprets enriched prompt
+    - Generates YAML modifications or Fluent instructions
     ↓
 [4] YAML Editor
-    - Updates simulation configuration (input.yaml)
+    - Updates input.yaml dynamically
     ↓
 [5] PyFluent Automation
     - Runs geometry → mesh → setup → solve → post-process
     ↓
 [6] Output
-    - Saves contour plots, reports
-    - Speaks status via **gTTS**
+    - Contour plots, reports
+    - Voice status updates via **gTTS**
 ```
 ### Voice Output
 Currently powered by **Google Text-to-Speech (GTTS)** for demo simplicity.
