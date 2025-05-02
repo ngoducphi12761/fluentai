@@ -90,3 +90,46 @@ User (Voice/Text)
 ### Voice Output
 Currently powered by **Google Text-to-Speech (GTTS)** for demo simplicity.
 Will be upgraded to **Bark or ElevenLabs** in future versions for more natural, production-ready voice output
+
+---
+
+## How to Run FluentAI
+
+### 1. Install dependencies
+
+Make sure you have Python 3.10+ installed. Then run:
+
+```bash
+pip install -r requirements.txt
+
+Optional (recommended): Create and activate a virtual environment
+
+python -m venv pyfluent-env
+pyfluent-env\Scripts\activate  # On Windows only
+
+```
+2. Configure Simulation in input.yaml
+Edit the input.yaml file to define:
+
+- Geometry path
+- Boundary conditions
+- Iterations, solver model
+- Post-processing outputs
+
+```yaml
+geometry_file: geometry/Static Mixer geometry.dsco
+iterations: 50
+velocity_inlets:
+  - inlet_name: velocity-inlet-1
+    velocity: 3.0
+```
+3. Run 
+```bash
+py ./launch_fluentai.py
+
+Run steady-state simulation for 50 iterations and set inlet temperature to 300 K
+```
+4. View Results
+After a run, check:
+- output_*/: for contour images
+
