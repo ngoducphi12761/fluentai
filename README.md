@@ -9,7 +9,7 @@
 **FluentAI** redefines how engineers interact with simulation platforms like **Ansys Fluent**, **STAR-CCM+**, and **OpenFOAM**. By replacing GUI-based workflows with **natural language interaction**, FluentAI empowers users to control and automate simulation tasks using:
 
 - **Retrieval-Augmented Generation (RAG)** for context-aware knowledge recall  
-- *LLM-driven reasoning (LLaMA 3 / GPT)** for understanding simulation logic  
+- **LLM-driven reasoning (LLaMA 3 / GPT)** for understanding simulation logic  
 - **Rule-based action planning** to ensure reliable and deterministic execution  
 
 **FluentAI** is more than a chatbot — it's a decision-making agent capable of understanding, planning, and executing complete CFD workflows from voice or text input.
