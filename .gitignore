@@ -21,6 +21,7 @@ vector_store/*.json
 dist/
 temp/
 build/
+output_*/
 FM_Duc_Phi_Ngo_*/
 VITS-fast-fine-tuning/
 

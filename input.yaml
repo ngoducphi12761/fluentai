@@ -1,5 +1,5 @@
 geometry_file: geometry/Static Mixer geometry.dsco
-iterations: 10
+iterations: 100
 post_processing:
   create_contours:
   - field: velocity-magnitude
@@ -45,8 +45,8 @@ turbulence_model:
   sub_model: sst
 velocity_inlets:
 - inlet_name: velocity-inlet-1
-  temperature: 300.0
-  velocity: 10.0
+  temperature: 350.0
+  velocity: 12.0
 - inlet_name: velocity-inlet-2
-  temperature: 310.0
-  velocity: 3.0
+  temperature: 300.0
+  velocity: 5.0
