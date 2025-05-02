@@ -85,7 +85,7 @@ User (Voice/Text)
     ↓
 [6] Output
     - Contour plots, reports
-    - Voice status updates via **gTTS**
+    - Voice status updates via gTTS
 ```
 ### Voice Output
 Currently powered by **Google Text-to-Speech (GTTS)** for demo simplicity.
