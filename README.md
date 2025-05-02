@@ -8,9 +8,9 @@
 
 **FluentAI** redefines how engineers interact with simulation platforms like **Ansys Fluent**, **STAR-CCM+**, and **OpenFOAM**. By replacing GUI-based workflows with **natural language interaction**, FluentAI empowers users to control and automate simulation tasks using:
 
-- 🔍 **Retrieval-Augmented Generation (RAG)** for context-aware knowledge recall  
-- 🧠 **LLM-driven reasoning (LLaMA 3 / GPT)** for understanding simulation logic  
-- ⚙️ **Rule-based action planning** to ensure reliable and deterministic execution  
+- **Retrieval-Augmented Generation (RAG)** for context-aware knowledge recall  
+- *LLM-driven reasoning (LLaMA 3 / GPT)** for understanding simulation logic  
+- **Rule-based action planning** to ensure reliable and deterministic execution  
 
 **FluentAI** is more than a chatbot — it's a decision-making agent capable of understanding, planning, and executing complete CFD workflows from voice or text input.
 
@@ -63,33 +63,26 @@ In modern simulation workflows, engineers lose productivity to:
 
 ---
 
-## 📐 Architecture Overview
-
-```text
-            ┌──────────────────────┐
-            │  User Input (Voice/Text)
-            └──────────┬───────────┘
-                     ↓
-        ┌────────────────────────────┐
-        │ Vector Search (FAISS + LangChain)
-        └────────┬───────────────────┘
-                 ↓
-       ┌───────────────────────────────┐
-       │ Prompt Template + Rule Engine │
-       └────────┬──────────────────────┘
-                ↓
-           ┌────────────────────┐
-           │  LLM (LLaMA 3 / GPT) │
-           └────────┬───────────┘
-                    ↓
-      ┌──────────────────────────────┐
-      │ JSON Action Plan Generator   │
-      └────────┬─────────────────────┘
-               ↓
-     ┌───────────────────────────────┐
-     │ Action Dispatcher (PyFluent)  │
-     └───────────────────────────────┘
-
+## Fluentai Architecture Overview
+User (Voice/Text)
+    ↓
+[1] Whisper (Speech-to-Text)
+    ↓
+[2] LLM (LLaMA 3 / GPT-4)
+    ↓
+[3] RAG Engine
+    - Retrieves context from Knowledge Base via Vector Store (e.g., FAISS)
+    - Enhances prompts with CFD-specific logic
+    ↓
+[4] YAML Editor
+    - Updates simulation configuration (input.yaml)
+    ↓
+[5] PyFluent Automation
+    - Runs geometry → mesh → setup → solve → post-process
+    ↓
+[6] Output
+    - Saves contour plots, reports
+    - Speaks status via **gTTS**
 ```
 ### Voice Output
 Currently powered by **Google Text-to-Speech (GTTS)** for demo simplicity.
