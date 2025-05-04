@@ -1,0 +1,72 @@
+==============================
+FLUENTAI 2.0 - RL AGENT PLAN
+==============================
+
+OBJECTIVE:
+----------
+Build a reinforcement learning agent that optimizes CFD simulation setups (e.g., solver settings, mesh quality, turbulence models) using user feedback or simulation results.
+
+STAGE 1: ENVIRONMENT DESIGN
+---------------------------
+[ ] Create custom Gym-like environment `CFDSimEnv`
+    - Define action space (discrete or multi-discrete)
+    - Define observation/state space (case metadata, previous actions, errors)
+    - Implement reset() to initialize new simulation
+    - Implement step(action) to apply changes and compute reward
+
+STAGE 2: RL MODEL SETUP
+-----------------------
+[ ] Choose baseline RL algorithm (PPO via stable-baselines3)
+[ ] Wrap CFDSimEnv into compatible format
+[ ] Train on synthetic feedback or predefined simulation logs
+[ ] Evaluate agent policy performance
+
+STAGE 3: FLUENTAI INTEGRATION
+-----------------------------
+[ ] Add `rl_agent/` folder to FluentAI project
+[ ] Expose RL decisions to YAML generator or config planner
+[ ] Add user feedback interface in CLI/GUI:
+    - "Accept AI recommendation"
+    - "Give reward +1 / 0 / -1"
+
+STAGE 4: LOGGING & RETRAINING
+-----------------------------
+[ ] Log each run's: state, action, reward, outcome (JSON/CSV)
+[ ] Build offline trainer to retrain model from collected data
+[ ] Add functionality to export trained policy
+
+STAGE 5: EXPANSION
+------------------
+[ ] Support multi-agent training for different solvers
+[ ] Add continuous action support (e.g., inlet velocity tuning)
+[ ] Combine RL with LLM-driven planning (hybrid AI)
+
+FOLDER STRUCTURE:
+-----------------
+fluentai/
+└── rl_agent/
+    ├── envs/
+    │   └── cfd_sim_env.py
+    ├── models/
+    │   └── ppo_policy.py
+    ├── trainers/
+    │   └── train_rl_agent.py
+    ├── utils/
+    │   └── logger.py
+    └── logs/
+        └── training_runs/
+
+TOOLS & LIBRARIES:
+------------------
+- Python 3.10+
+- Gymnasium or Gym
+- stable-baselines3s
+- numpy, pandas, matplotlib
+- Fluent/OpenFOAM subprocess runners
+
+NOTES:
+------
+- Start with simple case types: pipe flow, heat exchanger
+- Use scripted convergence status or run time as reward signal
+- Keep user feedback loop in mind for long-term reward learning
+
