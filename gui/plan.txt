@@ -1,0 +1,8 @@
+Fluent 2.0
+Uploading geometry/config
+
+Voice/text prompt interface (Whisper → LLM)
+
+Real-time log stream
+
+Result preview (e.g., velocity contours)
