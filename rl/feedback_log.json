@@ -1,0 +1,14 @@
+{
+    "state": {
+      "geometry": "pipe",
+      "flow_type": "turbulent",
+      "Re": 10000
+    },
+    "action": {
+      "mesh_type": "hex",
+      "sizing": "fine",
+      "inflation_layers": 3
+    },
+    "reward": 1
+  }
+  
