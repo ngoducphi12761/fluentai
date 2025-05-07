@@ -32,7 +32,18 @@ with open("vector_store/vector_store_export.json", "w", encoding="utf-8") as f:
 
 print("✅ vector_store_export.json saved.")
 
+# def retrieve_context(query):
+#     docs = vector_db.similarity_search(query, k=4)
+#     string = "\n".join([doc.page_content for doc in docs])
+#     return string
 def retrieve_context(query):
-    docs = vector_db.similarity_search(query, k=4)
-    string = "\n".join([doc.page_content for doc in docs])
+    docs = vector_db.similarity_search_with_score(query, k=4)
+    relevant_docs = [doc for doc, score in docs if score > 0.7]  # Only keep high-similarity docs
+
+    if not relevant_docs:
+        return ""  # Return empty if no highly relevant docs are found
+
+    string = "\n".join([doc.page_content for doc in relevant_docs])
     return string
+
+#similarity_search_with_score
