@@ -47,7 +47,7 @@ def run_fluent_assistant():
         transcribed = clean_text(transcribed)
         context = retrieve_context(transcribed)
         # Debug: Print the context retrieved
-        # print("[Context]", context)
+        print("[Context]", context)
         # Fallback to general-purpose if context is empty
         # if not context.strip():
         #     # print("No relevant to Fluent Domain.")
@@ -61,12 +61,14 @@ def run_fluent_assistant():
     # ✅ Context found
             if is_action_command(transcribed):
                 prompt = build_prompt(context, transcribed, mode="action")
+                print("[action]: ", prompt)
             else:
                 prompt = build_prompt(context, transcribed, mode="question")
+                print("[question]: ", prompt)
         else:
             # ✅ No relevant Fluent context found → fallback general polite
             prompt = f"Answer the following naturally as FluentAi: {transcribed}"
-
+            print("[no context found]",prompt)
 
           # Debug: Print the transcribed input
         # print("[prompt]", prompt)

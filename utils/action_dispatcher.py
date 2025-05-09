@@ -39,6 +39,6 @@ def execute_action_plan(action_plan: list):
         else:
             print(f"⚠️ Warning: Unknown action type '{action_type}' — skipping.")
 
-    # 🔥 Save all changes once at the end
+    # Save all changes once at the end
     yaml_editor.save_yaml()
     print("✅ All actions ./ and YAML saved successfully.")
