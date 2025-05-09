@@ -1,0 +1,65 @@
+
+# Core Libraries
+os-sys
+logging
+time
+re
+subprocess
+json
+pyyaml
+
+# PyFluent (Ansys Fluent Automation)
+ansys-fluent
+ansys-fluent-core
+ansys-fluent-automation
+
+# Machine Learning and Reinforcement Learning
+torch==2.0.1
+torchvision==0.15.2
+transformers==4.30.2
+sentence-transformers==2.2.2
+gymnasium==0.28.1
+stable-baselines3==1.7.0
+scikit-learn==1.2.2
+numpy==1.24.3
+pandas==2.0.1
+
+# LLM and RAG Components
+langchain==0.0.223
+faiss-cpu==1.7.4
+sentence-transformers==2.2.2
+nltk==3.8.1
+
+# Voice Recognition and Synthesis
+whisper==1.0.0
+VITS-fast==0.2.4
+pyaudio==0.2.13
+soundfile==0.12.1
+wave==0.0.2
+
+# User Interface (GUI)
+tk
+react (Frontend) - Managed separately in package.json for React frontend
+axios - Managed separately in package.json for React frontend
+spring-boot (Backend) - Managed separately in Maven/Gradle for Java backend
+framer-motion - Managed separately in package.json for React frontend
+
+# Other Utilities
+pydantic==1.10.7
+fastapi==0.97.0
+uvicorn==0.22.0
+multiprocessing-logging==0.4.9
+concurrent-log-handler==0.9.24
+
+# Docker and Deployment
+docker
+docker-compose
+nginx
+
+# Cloud and Storage
+awscli==1.27.157
+boto3==1.26.157
+
+# Version Control and CI/CD
+gitpython==3.1.31
+pre-commit==3.3.3
