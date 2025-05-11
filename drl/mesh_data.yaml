@@ -1,0 +1,9 @@
+# mesh_data.yaml
+mesh_settings:
+  - type: "polyhedral"
+    element_size: 0.03
+    inflation_layers: 5
+    skewness: 0.95
+    orthogonality: 0.9
+    reward: 1.0
+    residuals: 1e-6
